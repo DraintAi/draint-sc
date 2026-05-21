@@ -27,3 +27,7 @@ ethereum_mainnet = { key = "${ETHERSCAN_API_KEY}", url = "https://api.etherscan.
 base_sepolia = { key = "${BASESCAN_API_KEY}", url = "https://api-sepolia.basescan.org/api", chain = 84532 }
 arbitrum_sepolia = { key = "${ARBISCAN_API_KEY}", url = "https://api-sepolia.arbiscan.io/api", chain = 421614 }
 optimism_sepolia = { key = "${OPSCAN_API_KEY}", url = "https://api-sepolia-optimistic.etherscan.io/api", chain = 11155420 }
+
+# CI profile — referenced by .github/workflows/test.yml via FOUNDRY_PROFILE=ci.
+# Inherits everything from default; declared so CI doesn't emit a fallback warning.
+[profile.ci]

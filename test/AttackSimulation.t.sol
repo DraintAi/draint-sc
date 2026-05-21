@@ -76,7 +76,7 @@ contract AttackSimulationTest is Test {
         //
         // We mimic this by calling the drainer directly with ETH.
         vm.prank(victim);
-        (bool ok, ) = address(drainer).call{value: 5 ether}("");
+        (bool ok,) = address(drainer).call{value: 5 ether}("");
         assertTrue(ok, "drainer fallback should accept ETH");
 
         // Drainer forwarded the ETH out — its balance is zero, attacker is
@@ -90,7 +90,7 @@ contract AttackSimulationTest is Test {
         // Plain ETH transfers (no calldata) hit `receive()` not `fallback()`.
         // Both routes drain.
         vm.prank(victim);
-        (bool ok, ) = address(drainer).call{value: 2 ether}("");
+        (bool ok,) = address(drainer).call{value: 2 ether}("");
         assertTrue(ok);
         assertEq(attacker.balance, 2 ether);
     }
@@ -104,40 +104,24 @@ contract AttackSimulationTest is Test {
         address[] memory initial = new address[](1);
         initial[0] = mockSafeDelegator;
 
-        DraintAllowlistGuard guard = new DraintAllowlistGuard(
-            address(this),
-            initial
-        );
+        DraintAllowlistGuard guard = new DraintAllowlistGuard(address(this), initial);
 
         // Legit delegation passes.
         guard.checkDelegation(mockSafeDelegator);
 
         // Drainer delegation reverts BEFORE the user signs anything.
-        vm.expectRevert(
-            abi.encodeWithSelector(
-                DraintAllowlistGuard.TargetNotAllowed.selector,
-                address(drainer)
-            )
-        );
+        vm.expectRevert(abi.encodeWithSelector(DraintAllowlistGuard.TargetNotAllowed.selector, address(drainer)));
         guard.checkDelegation(address(drainer));
     }
 
     function test_defense_owner_can_allow_new_targets() public {
         address[] memory empty = new address[](0);
-        DraintAllowlistGuard guard = new DraintAllowlistGuard(
-            address(this),
-            empty
-        );
+        DraintAllowlistGuard guard = new DraintAllowlistGuard(address(this), empty);
 
         address newTarget = makeAddr("NewAuditedDelegator");
 
         // Before adding: reverts.
-        vm.expectRevert(
-            abi.encodeWithSelector(
-                DraintAllowlistGuard.TargetNotAllowed.selector,
-                newTarget
-            )
-        );
+        vm.expectRevert(abi.encodeWithSelector(DraintAllowlistGuard.TargetNotAllowed.selector, newTarget));
         guard.checkDelegation(newTarget);
 
         // Owner adds the new target.
