@@ -20,7 +20,7 @@ import {DraintCuratedTargetsEnforcer} from "../src/DraintCuratedTargetsEnforcer.
 ///     --verify
 contract DeployEnforcer is Script {
     function run() external returns (DraintCuratedTargetsEnforcer enforcer) {
-        uint256 deployerKey = vm.envUint("PRIVATE_KEY");
+        uint256 deployerKey = _loadPrivateKey();
         address owner = vm.envOr("DRAINT_ENFORCER_OWNER", vm.addr(deployerKey));
 
         (address[] memory targets, string[] memory labels) = _readInitialTargets();
@@ -38,6 +38,16 @@ contract DeployEnforcer is Script {
         console.log(address(enforcer));
 
         return enforcer;
+    }
+
+    /// @dev Accepts PRIVATE_KEY with or without the `0x` prefix.
+    function _loadPrivateKey() internal view returns (uint256) {
+        string memory raw = vm.envString("PRIVATE_KEY");
+        bytes memory rawBytes = bytes(raw);
+        if (rawBytes.length >= 2 && rawBytes[0] == "0" && (rawBytes[1] == "x" || rawBytes[1] == "X")) {
+            return vm.parseUint(raw);
+        }
+        return vm.parseUint(string.concat("0x", raw));
     }
 
     /// @dev Parse comma-separated env vars. If unset, deploy with empty list

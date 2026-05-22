@@ -1,0 +1,14 @@
+{
+  "chainId": 11155111,
+  "chainName": "ethereum_sepolia",
+  "contracts": {
+    "DraintCuratedTargetsEnforcer": {
+      "address": "0x2187D61279a8A54dc8907865959ef6cC8beBDa14",
+      "deployedAt": "2026-05-22T08:39:41Z",
+      "deployer": "0x4Fb0CB55EcFDd9CDA56f88531A38157d2D83d70f",
+      "owner": "0x4Fb0CB55EcFDd9CDA56f88531A38157d2D83d70f",
+      "verified": true,
+      "explorer": "https://sepolia.etherscan.io/address/0x2187d61279a8a54dc8907865959ef6cc8bebda14"
+    }
+  }
+}
