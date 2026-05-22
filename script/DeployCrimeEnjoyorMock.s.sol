@@ -27,8 +27,7 @@ contract DeployCrimeEnjoyorMock is Script {
 
     function run() external returns (CrimeEnjoyorMock drainer) {
         uint256 deployerKey = _loadPrivateKey();
-        address payable attacker =
-            payable(vm.envOr("CRIME_ENJOYOR_ATTACKER", address(DEFAULT_ATTACKER)));
+        address payable attacker = payable(vm.envOr("CRIME_ENJOYOR_ATTACKER", address(DEFAULT_ATTACKER)));
 
         console.log("WARNING: deploying a functional EIP-7702 drainer for testing");
         console.log("  Attacker sink: ", attacker);
